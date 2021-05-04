@@ -39,12 +39,50 @@ void filestat2(){
 
 //파일 1의 시간 정보를 가져오는 함수 작성
 void filetime1(){
-    
+	struct stat buf;
+	struct tm *ct;
+	struct tm *mt;
+	struct tm *at;
+
+	char* filename = "text1.txt";
+	if(stat(filename, &buf) != 0){
+		switch(errno){
+			case ENOENT:
+				fprintf(stderr, "file1 not found. \n"); break;
+			case EINVAL:
+				fprintf(stderr, "invalid parameter to stat. \n"); break;
+			default:
+				fprintf(stderr, "unexpected error. \n");
+			}
+	}
+	
+	ct = localtime(&buf.st_ctime);
+	mt = localtime(&buf.st_mtime);
+	at = localtime(&buf.st_atime);
 }
 
 //파일 2의 시간 정보를 가져오는 함수 작성
 void filetime2(){
-    
+    struct stat buf;
+        struct tm *ct;
+        struct tm *mt;
+        struct tm *at;
+
+        char* filename = "text2.txt";
+        if(stat(filename, &buf) != 0){
+                switch(errno){
+                        case ENOENT:
+                                fprintf(stderr, "file1 not found. \n"); break;
+                        case EINVAL:
+                                fprintf(stderr, "invalid parameter to stat. \n"); break;
+                        default:
+                                fprintf(stderr, "unexpected error. \n");
+                        }
+        }
+
+        ct = localtime(&buf.st_ctime);
+        mt = localtime(&buf.st_mtime);
+        at = localtime(&buf.st_atime);
 }
 
 //두 개의 파일 크기를 비교하는 함수 작성
