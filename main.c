@@ -44,7 +44,7 @@ void filestat1(){
 //파일 2의 정보를 가져오는 함수 작성
 void filestat2(){
     char* filename2 = "text2.txt";
-    if(stat(filename2, &stat12) != 0){
+    if(stat(filename2, &stat2) != 0){
 	    switch(errno){
 		    case ENOENT:
 			    fprintf(stderr, "file1 not found. \n"); break;
