@@ -29,12 +29,30 @@ int main(){
 
 //파일 1의 정보를 가져오는 함수 작성
 void filestat1(){
-    
+    char* filename1 = "text1.txt";
+    if(stat(filename1, &stat1) != 0){
+	    switch(errno){
+		    case ENOENT:
+			    fprintf(stderr, "file1 not found. \n"); break;
+		    case EINVAL:
+			    fprintf(stderr, "invalid parameter to stat. \n"); break;
+		    default:
+			    fprintf(stderr, "unexpected error. \n");
+	    }
 }
 
 //파일 2의 정보를 가져오는 함수 작성
 void filestat2(){
-    
+    char* filename2 = "text2.txt";
+    if(stat(filename2, &stat12) != 0){
+	    switch(errno){
+		    case ENOENT:
+			    fprintf(stderr, "file1 not found. \n"); break;
+		    case EINVAL:
+			    fprintf(stderr, "invalid parameter to stat. \n"); break;
+		    default:
+			    fprintf(stderr, "unexpected error. \n");
+	    }
 }
 
 //파일 1의 시간 정보를 가져오는 함수 작성
