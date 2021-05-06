@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <time.h>
+#include <string.h>
 
 struct stat stat1, stat2;
 struct tm *time1, *time2;
@@ -30,39 +31,23 @@ int main(){
 //파일 1의 정보를 가져오는 함수 작성
 void filestat1(){
     char* filename1 = "text1.txt";
-    if(stat(filename1, &stat1) != 0){
-	    switch(errno){
-		    case ENOENT:
-			    fprintf(stderr, "file1 not found. \n"); break;
-		    case EINVAL:
-			    fprintf(stderr, "invalid parameter to stat. \n"); break;
-		    default:
-			    fprintf(stderr, "unexpected error. \n");
-	    }
+    stat(filename1, &stat1);
 }
 
 //파일 2의 정보를 가져오는 함수 작성
 void filestat2(){
     char* filename2 = "text2.txt";
-    if(stat(filename2, &stat2) != 0){
-	    switch(errno){
-		    case ENOENT:
-			    fprintf(stderr, "file1 not found. \n"); break;
-		    case EINVAL:
-			    fprintf(stderr, "invalid parameter to stat. \n"); break;
-		    default:
-			    fprintf(stderr, "unexpected error. \n");
-	    }
+    stat(filename2, &stat2);
 }
 
 //파일 1의 시간 정보를 가져오는 함수 작성
 void filetime1(){
-	time1 = localtime(&stat1.st_mtime);
+	localtime_r(&stat1.st_mtime, time1);
 }
 
 //파일 2의 시간 정보를 가져오는 함수 작성
 void filetime2(){
-	time2 = localtime(&stat2.st_mtime);
+        localtime_r(&stat2.st_mtime, time2);
 }
 
 //두 개의 파일 크기를 비교하는 함수 작성
@@ -107,7 +92,37 @@ void blockcmp(){
 
 //두 개의 파일 수정 날짜를 비교하는 함수 작성
 void datecmp(){
-    
+	printf("%d, %d, %d, %d\n",time1->tm_hour, time1->tm_min, time2->tm_hour, time2->tm_min);	
+	
+	
+	printf("date compare\n");
+	int date_month_stat1, date_month_stat2;
+	int date_day_stat1, date_day_stat2;
+        
+	date_month_stat1=time1->tm_mon+1;
+        date_month_stat2=time2->tm_mon+1;
+	
+	date_day_stat1=time1->tm_mday;
+	date_day_stat2=time2->tm_mday;
+
+        if(date_month_stat1==date_month_stat2){
+               	if(date_day_stat1==date_day_stat2){
+			printf("same date\n");
+		}
+		else if(date_day_stat1<date_day_stat2){
+			printf("text1 is early\n");
+		}
+		else{
+			printf("text2 is early\n");
+		}
+        }
+        else if(date_month_stat1<date_month_stat2){
+                printf("text1 is early\n");
+        }
+        else{
+                printf("text2 is early\n");
+        }
+        printf("\n");    
 }
 
 //두 개의 파일 수정 시간을 비교하는 함수 작성
