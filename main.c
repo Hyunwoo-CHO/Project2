@@ -34,7 +34,7 @@ int main(){
 
 //파일 1의 정보를 가져오는 함수 작성
 void filestat1(){
-    char* filename1 = "text1.txt";
+    char* filename1 = "text1";
     if(stat(filename1, &stat1) != 0){
 	    switch(errno){
 		    case ENOENT:
@@ -49,7 +49,7 @@ void filestat1(){
 }
 //파일 2의 정보를 가져오는 함수 작성
 void filestat2(){
-    char* filename2 = "text2.txt";
+    char* filename2 = "text2";
     if(stat(filename2, &stat2) != 0){
 	    switch(errno){
 		    case ENOENT:
@@ -59,8 +59,8 @@ void filestat2(){
 		    default:
 			    fprintf(stderr, "unexpected error. \n");
 	    }
-	}
-
+    
+    }
 }
 
 //파일 1의 시간 정보를 가져오는 함수 작성
@@ -120,10 +120,7 @@ void blockcmp(){
 }
 
 //두 개의 파일 수정 날짜를 비교하는 함수 작성
-void datecmp(){
-	printf("%d, %d, %d, %d\n",time1->tm_hour, time1->tm_min, time2->tm_hour, time2->tm_min);	
-	
-	
+void datecmp(){	
 	printf("date compare\n");
 	int date_month_stat1, date_month_stat2;
 	int date_day_stat1, date_day_stat2;
@@ -179,4 +176,5 @@ void timecmp(){
 			printf("same time\n");
 		}
 	}
+	printf("\n");
 }
