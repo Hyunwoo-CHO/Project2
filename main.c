@@ -7,6 +7,7 @@
 #include <string.h>
 #include <stdlib.h>
 
+
 struct stat stat1, stat2;
 struct tm *time1, *time2;
 
@@ -44,6 +45,7 @@ void filestat1(){
 			    fprintf(stderr, "unexpected error. \n");
 	    }
 	}
+
 }
 //파일 2의 정보를 가져오는 함수 작성
 void filestat2(){
@@ -58,18 +60,23 @@ void filestat2(){
 			    fprintf(stderr, "unexpected error. \n");
 	    }
 	}
+
 }
 
 //파일 1의 시간 정보를 가져오는 함수 작성
 void filetime1(){
+
 	time1 = malloc(sizeof(struct tm));
+
 	localtime_r(&stat1.st_mtime, time1);
 }
 
 //파일 2의 시간 정보를 가져오는 함수 작성
 void filetime2(){
+
 	time2 = malloc(sizeof(struct tm));
 	localtime_r(&stat2.st_mtime, time2);
+
 }
 
 //두 개의 파일 크기를 비교하는 함수 작성
@@ -114,7 +121,37 @@ void blockcmp(){
 
 //두 개의 파일 수정 날짜를 비교하는 함수 작성
 void datecmp(){
-    
+	printf("%d, %d, %d, %d\n",time1->tm_hour, time1->tm_min, time2->tm_hour, time2->tm_min);	
+	
+	
+	printf("date compare\n");
+	int date_month_stat1, date_month_stat2;
+	int date_day_stat1, date_day_stat2;
+        
+	date_month_stat1=time1->tm_mon+1;
+        date_month_stat2=time2->tm_mon+1;
+	
+	date_day_stat1=time1->tm_mday;
+	date_day_stat2=time2->tm_mday;
+
+        if(date_month_stat1==date_month_stat2){
+               	if(date_day_stat1==date_day_stat2){
+			printf("same date\n");
+		}
+		else if(date_day_stat1<date_day_stat2){
+			printf("text1 is early\n");
+		}
+		else{
+			printf("text2 is early\n");
+		}
+        }
+        else if(date_month_stat1<date_month_stat2){
+                printf("text1 is early\n");
+        }
+        else{
+                printf("text2 is early\n");
+        }
+        printf("\n");    
 }
 
 //두 개의 파일 수정 시간을 비교하는 함수 작성
