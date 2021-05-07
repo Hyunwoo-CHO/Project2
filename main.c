@@ -3,10 +3,14 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <time.h>
+#include <errno.h>
 #include <string.h>
+#include <stdlib.h>
+
 
 struct stat stat1, stat2;
 struct tm *time1, *time2;
+
 
 void filestat1();
 void filestat2();
@@ -31,23 +35,48 @@ int main(){
 //파일 1의 정보를 가져오는 함수 작성
 void filestat1(){
     char* filename1 = "text1.txt";
-    stat(filename1, &stat1);
-}
+    if(stat(filename1, &stat1) != 0){
+	    switch(errno){
+		    case ENOENT:
+			    fprintf(stderr, "file1 not found. \n"); break;
+		    case EINVAL:
+			    fprintf(stderr, "invalid parameter to stat. \n"); break;
+		    default:
+			    fprintf(stderr, "unexpected error. \n");
+	    }
+	}
 
+}
 //파일 2의 정보를 가져오는 함수 작성
 void filestat2(){
     char* filename2 = "text2.txt";
-    stat(filename2, &stat2);
+    if(stat(filename2, &stat2) != 0){
+	    switch(errno){
+		    case ENOENT:
+			    fprintf(stderr, "file1 not found. \n"); break;
+		    case EINVAL:
+			    fprintf(stderr, "invalid parameter to stat. \n"); break;
+		    default:
+			    fprintf(stderr, "unexpected error. \n");
+	    }
+	}
+
 }
 
 //파일 1의 시간 정보를 가져오는 함수 작성
 void filetime1(){
+
+	time1 = malloc(sizeof(struct tm));
+
 	localtime_r(&stat1.st_mtime, time1);
 }
 
 //파일 2의 시간 정보를 가져오는 함수 작성
 void filetime2(){
-        localtime_r(&stat2.st_mtime, time2);
+
+	time2 = malloc(sizeof(struct tm));
+	localtime_r(&stat2.st_mtime, time2);
+
 }
 
 //두 개의 파일 크기를 비교하는 함수 작성
@@ -60,7 +89,7 @@ void sizecmp(){
 	if(size_stat1==size_stat2){
 		printf("sizes are equal\n");
 	}
-	else if(size_stat1>>size_stat2){
+	else if(size_stat1>size_stat2){
 		printf("text1 is bigger\n");
 	}
 	else{
@@ -80,7 +109,7 @@ void blockcmp(){
         if(bsize_stat1==bsize_stat2){
                 printf("sizes are equal\n");
         }
-        else if(bsize_stat1>>bsize_stat2){
+        else if(bsize_stat1>bsize_stat2){
                 printf("text1 is bigger\n");
         }
         else{
@@ -127,5 +156,27 @@ void datecmp(){
 
 //두 개의 파일 수정 시간을 비교하는 함수 작성
 void timecmp(){
-    
+	int t1_hour = time1->tm_hour;
+	int t2_hour = time2->tm_hour;
+	int t1_min = time1->tm_min;
+	int t2_min = time2->tm_min;
+	
+	printf("time compare\n");
+	if(t1_hour > t2_hour){
+		printf("text2 is early\n");
+	}
+	else if(t1_hour < t2_hour){
+		printf("text1 is early\n");
+	}
+	else{
+		if(t1_min > t2_min){
+			printf("text2 is early\n");
+		}
+		else if(t1_min < t2_min){
+			printf("text1 is early\n");
+		}
+		else{
+			printf("same time\n");
+		}
+	}
 }
